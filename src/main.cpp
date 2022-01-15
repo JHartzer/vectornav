@@ -34,6 +34,7 @@
 #include "sensor_msgs/Imu.h"
 #include "sensor_msgs/MagneticField.h"
 #include "sensor_msgs/NavSatFix.h"
+#include "sensor_msgs/TimeReference.h"
 #include "nav_msgs/Odometry.h"
 #include "sensor_msgs/Temperature.h"
 #include "sensor_msgs/FluidPressure.h"
@@ -42,7 +43,7 @@
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <vectornav/Ins.h>
 
-ros::Publisher pubIMU, pubMag, pubGPS, pubOdom, pubTemp, pubPres, pubIns;
+ros::Publisher pubIMU, pubMag, pubGPS, pubOdom, pubTemp, pubPres, pubTime, pubIns;
 ros::ServiceServer resetOdomSrv;
 
 XmlRpc::XmlRpcValue rpc_temp;
@@ -161,6 +162,7 @@ int main(int argc, char *argv[])
     pubOdom = n.advertise<nav_msgs::Odometry>("vectornav/Odom", 1000);
     pubTemp = n.advertise<sensor_msgs::Temperature>("vectornav/Temp", 1000);
     pubPres = n.advertise<sensor_msgs::FluidPressure>("vectornav/Pres", 1000);
+    pubTime = n.advertise<sensor_msgs::TimeReference>("vectornav/TimeRef", 1000);
     pubIns = n.advertise<vectornav::Ins>("vectornav/INS", 1000);
 
     resetOdomSrv = n.advertiseService<std_srvs::Empty::Request, std_srvs::Empty::Response>(
@@ -739,6 +741,18 @@ void fill_ins_message(
     }
 }
 
+//Helper function to create time reference message
+void fill_time_message(
+    sensor_msgs::TimeReference &msgTime, vn::sensors::CompositeData &cd, ros::Time &time, UserData *user_data)
+{
+    msgTime.header.stamp = time;
+    msgTime.header.frame_id = user_data->frame_id;
+    if (cd.hasTimeGps())
+    {
+        msgTime.time_ref.fromNSec(cd.timeGps());
+        msgTime.source = "Vectornav GPS 1";
+    }
+}
 
 static ros::Time get_time_stamp(
     vn::sensors::CompositeData &cd, UserData *user_data, const ros::Time &ros_time) {
@@ -831,5 +845,13 @@ void BinaryAsyncMessageReceived(void* userData, Packet& p, size_t index)
         vectornav::Ins msgINS;
         fill_ins_message(msgINS, cd, time, user_data);
         pubIns.publish(msgINS);
+    }
+
+    // GPS Time
+    if (user_data->device_family != VnSensor::Family::VnSensor_Family_Vn100 && pubTime.getNumSubscribers() > 0)
+    {
+        sensor_msgs::TimeReference msgTime;
+        fill_time_message(msgTime, cd, time, user_data);
+        pubTime.publish(msgTime);
     }
 }

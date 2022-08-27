@@ -1,0 +1,2 @@
+SUBSYSTEM=="tty", ACTION=="add", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", ATTRS{serial}=="AU04PL0Z", MODE="666", SYMLINK+="vn100", RUN+="/bin/setserial /dev/ttyUSB0 low_latency"
+SUBSYSTEM=="tty", ACTION=="add", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", ATTRS{serial}=="FT1GUI0J", MODE="666", SYMLINK+="vn300", RUN+="/bin/setserial /dev/ttyUSB0 low_latency"

@@ -1,6 +1,6 @@
 vn100:
   ros__parameters:
-    port: "/dev/ttyUSB0"
+    port: "/dev/vn100"
     baud: 921600
     reconnect_ms: 500
     # Reference vnproglib-1.2.0.0 headers for enum definitions

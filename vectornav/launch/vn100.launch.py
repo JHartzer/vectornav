@@ -15,14 +15,14 @@ def generate_launch_description():
         executable='vectornav',
         output='screen',
         name='vn100',
-        parameters=[os.path.join(this_dir, 'config', 'vn_100_800hz.yaml')])
+        parameters=[os.path.join(this_dir, 'config', 'vn100.yaml')])
     
     start_vectornav_sensor_msgs_cmd = Node(
         package='vectornav', 
         executable='vn_sensor_msgs',
         output='screen',
         name='vn100',
-        parameters=[os.path.join(this_dir, 'config', 'vn_100_800hz.yaml')])
+        parameters=[os.path.join(this_dir, 'config', 'vn100.yaml')])
 
     # Create the launch description and populate
     ld = LaunchDescription()

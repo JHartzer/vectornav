@@ -54,59 +54,59 @@ public:
     //
     // TODO(Dereck): Only publish if data is available from the sensor?
     pub_time_startup_ =
-      this->create_publisher<sensor_msgs::msg::TimeReference>("vectornav/time_startup", 10);
+      this->create_publisher<sensor_msgs::msg::TimeReference>("~/time_startup", 10);
     pub_time_gps_ =
-      this->create_publisher<sensor_msgs::msg::TimeReference>("vectornav/time_gps", 10);
+      this->create_publisher<sensor_msgs::msg::TimeReference>("~/time_gps", 10);
     pub_time_syncin_ =
-      this->create_publisher<sensor_msgs::msg::TimeReference>("vectornav/time_syncin", 10);
+      this->create_publisher<sensor_msgs::msg::TimeReference>("~/time_syncin", 10);
     pub_time_pps_ =
-      this->create_publisher<sensor_msgs::msg::TimeReference>("vectornav/time_pps", 10);
-    pub_imu_ = this->create_publisher<sensor_msgs::msg::Imu>("vectornav/imu", 10);
-    pub_gnss_ = this->create_publisher<sensor_msgs::msg::NavSatFix>("vectornav/gnss", 10);
+      this->create_publisher<sensor_msgs::msg::TimeReference>("~/time_pps", 10);
+    pub_imu_ = this->create_publisher<sensor_msgs::msg::Imu>("~/imu", 10);
+    pub_gnss_ = this->create_publisher<sensor_msgs::msg::NavSatFix>("~/gnss", 10);
     pub_imu_uncompensated_ =
-      this->create_publisher<sensor_msgs::msg::Imu>("vectornav/imu_uncompensated", 10);
+      this->create_publisher<sensor_msgs::msg::Imu>("~/imu_uncompensated", 10);
     pub_magnetic_ =
-      this->create_publisher<sensor_msgs::msg::MagneticField>("vectornav/magnetic", 10);
+      this->create_publisher<sensor_msgs::msg::MagneticField>("~/magnetic", 10);
     pub_temperature_ =
-      this->create_publisher<sensor_msgs::msg::Temperature>("vectornav/temperature", 10);
+      this->create_publisher<sensor_msgs::msg::Temperature>("~/temperature", 10);
     pub_pressure_ =
-      this->create_publisher<sensor_msgs::msg::FluidPressure>("vectornav/pressure", 10);
+      this->create_publisher<sensor_msgs::msg::FluidPressure>("~/pressure", 10);
     pub_velocity_ = this->create_publisher<geometry_msgs::msg::TwistWithCovarianceStamped>(
-      "vectornav/velocity_body", 10);
+      "~/velocity_body", 10);
     pub_pose_ =
-      this->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>("vectornav/pose", 10);
+      this->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>("~/pose", 10);
 
     //
     // Subscribers
     //
     auto sub_vn_common_cb = std::bind(&VnSensorMsgs::sub_vn_common, this, std::placeholders::_1);
     sub_vn_common_ = this->create_subscription<vectornav_msgs::msg::CommonGroup>(
-      "vectornav/raw/common", 10, sub_vn_common_cb);
+      "~/raw/common", 10, sub_vn_common_cb);
 
     auto sub_vn_time_cb = std::bind(&VnSensorMsgs::sub_vn_time, this, std::placeholders::_1);
     sub_vn_time_ = this->create_subscription<vectornav_msgs::msg::TimeGroup>(
-      "vectornav/raw/time", 10, sub_vn_time_cb);
+      "~/raw/time", 10, sub_vn_time_cb);
 
     auto sub_vn_imu_cb = std::bind(&VnSensorMsgs::sub_vn_imu, this, std::placeholders::_1);
     sub_vn_imu_ = this->create_subscription<vectornav_msgs::msg::ImuGroup>(
-      "vectornav/raw/imu", 10, sub_vn_imu_cb);
+      "~/raw/imu", 10, sub_vn_imu_cb);
 
     auto sub_vn_gps_cb = std::bind(&VnSensorMsgs::sub_vn_gps, this, std::placeholders::_1);
     sub_vn_gps_ = this->create_subscription<vectornav_msgs::msg::GpsGroup>(
-      "vectornav/raw/gps", 10, sub_vn_gps_cb);
+      "~/raw/gps", 10, sub_vn_gps_cb);
 
     auto sub_vn_attitude_cb =
       std::bind(&VnSensorMsgs::sub_vn_attitude, this, std::placeholders::_1);
     sub_vn_attitude_ = this->create_subscription<vectornav_msgs::msg::AttitudeGroup>(
-      "vectornav/raw/attitude", 10, sub_vn_attitude_cb);
+      "~/raw/attitude", 10, sub_vn_attitude_cb);
 
     auto sub_vn_ins_cb = std::bind(&VnSensorMsgs::sub_vn_ins, this, std::placeholders::_1);
     sub_vn_ins_ = this->create_subscription<vectornav_msgs::msg::InsGroup>(
-      "vectornav/raw/ins", 10, sub_vn_ins_cb);
+      "~/raw/ins", 10, sub_vn_ins_cb);
 
     auto sub_vn_gps2_cb = std::bind(&VnSensorMsgs::sub_vn_gps2, this, std::placeholders::_1);
     sub_vn_gps2_ = this->create_subscription<vectornav_msgs::msg::GpsGroup>(
-      "vectornav/raw/gps2", 10, sub_vn_gps2_cb);
+      "~/raw/gps2", 10, sub_vn_gps2_cb);
   }
 
 private:
@@ -198,6 +198,7 @@ private:
       msg.angular_velocity = msg_in->imu_rate;
       msg.linear_acceleration = msg_in->imu_accel;
 
+      /// @todo(hartzerj): Not sure if this is working properly
       fill_covariance_from_param("angular_velocity_covariance", msg.angular_velocity_covariance);
       fill_covariance_from_param(
         "linear_acceleration_covariance", msg.linear_acceleration_covariance);

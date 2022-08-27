@@ -154,14 +154,14 @@ public:
 
     // Composite Data Publisher
     pub_common_ =
-      this->create_publisher<vectornav_msgs::msg::CommonGroup>("vectornav/raw/common", 10);
-    pub_time_ = this->create_publisher<vectornav_msgs::msg::TimeGroup>("vectornav/raw/time", 10);
-    pub_imu_ = this->create_publisher<vectornav_msgs::msg::ImuGroup>("vectornav/raw/imu", 10);
-    pub_gps_ = this->create_publisher<vectornav_msgs::msg::GpsGroup>("vectornav/raw/gps", 10);
+      this->create_publisher<vectornav_msgs::msg::CommonGroup>("~/raw/common", 10);
+    pub_time_ = this->create_publisher<vectornav_msgs::msg::TimeGroup>("~/raw/time", 10);
+    pub_imu_ = this->create_publisher<vectornav_msgs::msg::ImuGroup>("~/raw/imu", 10);
+    pub_gps_ = this->create_publisher<vectornav_msgs::msg::GpsGroup>("~/raw/gps", 10);
     pub_attitude_ =
-      this->create_publisher<vectornav_msgs::msg::AttitudeGroup>("vectornav/raw/attitude", 10);
-    pub_ins_ = this->create_publisher<vectornav_msgs::msg::InsGroup>("vectornav/raw/ins", 10);
-    pub_gps2_ = this->create_publisher<vectornav_msgs::msg::GpsGroup>("vectornav/raw/gps2", 10);
+      this->create_publisher<vectornav_msgs::msg::AttitudeGroup>("~/raw/attitude", 10);
+    pub_ins_ = this->create_publisher<vectornav_msgs::msg::InsGroup>("~/raw/ins", 10);
+    pub_gps2_ = this->create_publisher<vectornav_msgs::msg::GpsGroup>("~/raw/gps2", 10);
 
     if (!optimize_serial_communication(port)) {
       RCLCPP_WARN(get_logger(), "time of message delivery may be compromised!");
